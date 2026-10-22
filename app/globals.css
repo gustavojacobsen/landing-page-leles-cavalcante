@@ -1,0 +1,314 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   TOKENS — paleta fixa, fontes, raios, sombras e easing.
+   Nenhum hex solto no JSX: tudo passa por aqui.
+   ========================================================================== */
+
+@theme {
+  --color-*: initial;
+
+  /* Paleta */
+  --color-branco: #ffffff;
+  --color-bege: #f5efe6;
+  --color-bege-escuro: #e8dccb;
+  --color-marrom: #4a3228;
+  --color-marrom-escuro: #3a2720;
+  --color-caramelo: #9a6b4f;
+  --color-caramelo-escuro: #83583f; /* títulos em tom caramelo, um pouco mais fechado */
+  --color-areia: #d9b99b;
+  --color-tinta: #2e2420;
+  --color-tinta-suave: #6b5b52;
+  --color-terracota: #b4533e;
+
+  /* Dourado do logo (mesmo acabamento do letreiro da clínica) */
+  --color-ouro-luz: #efd9a8;
+  --color-ouro-claro: #d4b075;
+  --color-ouro: #a9803f;
+  --color-ouro-escuro: #7d5a26;
+  --color-ouro-profundo: #5c3f17;
+
+  /* Selo "Aberto agora" no rodapé (sobre marrom) */
+  --color-verde-aberto: #6fbf8a;
+  --color-verde-aberto-claro: #a9dcb9;
+
+  /* Avatares dos depoimentos (tons terrosos, texto branco em negrito ≥ 18px) */
+  --color-terra-1: #7a4e36;
+  --color-terra-2: #6f5a3f;
+  --color-terra-3: #5e4b3c;
+  --color-terra-4: #8a5642;
+  --color-terra-5: #4f5a45;
+  --color-terra-6: #7b5b4a;
+
+  /* Marcas de terceiros (logo do Google, estrelas e selo) */
+  --color-google-azul: #4285f4;
+  --color-google-vermelho: #ea4335;
+  --color-google-amarelo: #fbbc05;
+  --color-google-verde: #34a853;
+  --color-estrela: #fbbc04;
+  --color-verificado: #1a73e8;
+
+  /* Raios */
+  --radius-arco: 999px;
+
+  /* Sombras quentes (marrom em baixa opacidade) */
+  --shadow-quente: 0 1px 2px rgb(74 50 40 / 0.05), 0 18px 40px -22px rgb(74 50 40 / 0.22);
+  --shadow-quente-lg: 0 2px 4px rgb(74 50 40 / 0.05), 0 28px 60px -26px rgb(74 50 40 / 0.3);
+
+  /* Easing padrão da página */
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Movimento */
+  --animate-marquee: marquee 40s linear infinite;
+}
+
+@theme inline {
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-logo: var(--font-cinzel), "Trajan Pro", Georgia, serif;
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+
+@layer base {
+  html {
+    scroll-padding-top: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    @apply bg-branco font-sans text-base leading-[1.6] text-tinta antialiased md:text-[1.0625rem];
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display tracking-[-0.02em] text-marrom;
+  }
+
+  ::selection {
+    @apply bg-areia text-marrom-escuro;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-4 outline-caramelo;
+  }
+}
+
+/* Lenis (scroll suave no desktop) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* ==========================================================================
+   UTILITÁRIOS DO DESIGN SYSTEM
+   ========================================================================== */
+
+@utility titulo-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 4.5vw, 4rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+
+@utility titulo-h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+
+@utility container-site {
+  @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+}
+
+@utility secao {
+  @apply py-20 md:py-32;
+}
+
+/* Seção que sobe sobre a anterior com cantos superiores arredondados */
+@utility sobreposta {
+  @apply relative z-10 -mt-10 rounded-t-[2.5rem];
+}
+
+/* Rolagem horizontal sem barra visível (listas que deslizam no celular) */
+@utility sem-barra {
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Moldura em arco: assinatura visual da página */
+@utility arco {
+  border-radius: var(--radius-arco) var(--radius-arco) 1.75rem 1.75rem;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Textura de grão (SVG noise inline, ~4%) */
+@utility grain {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: inherit;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* Brilho diagonal que atravessa o botão no hover */
+@utility shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(115deg, transparent 30%, rgb(255 255 255 / 0.22) 50%, transparent 70%);
+    transform: translateX(-120%);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    &:hover::after {
+      transform: translateX(120%);
+      transition: transform 0.9s var(--ease-premium);
+    }
+  }
+}
+
+/* Spotlight que segue o cursor (as variáveis --x/--y são definidas pelo <Card>) */
+@utility spotlight {
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s var(--ease-premium);
+    background: radial-gradient(
+      420px circle at var(--x, 50%) var(--y, 50%),
+      color-mix(in srgb, var(--color-caramelo) 11%, transparent),
+      transparent 65%
+    );
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover::before {
+      opacity: 1;
+    }
+  }
+}
+
+/* Entrada do hero em CSS puro (sem JS, sem atrasar o LCP: H1 e foto nunca começam invisíveis) */
+@utility entrada {
+  animation: subir 0.8s var(--ease-premium) both;
+  animation-delay: var(--atraso, 0ms);
+}
+
+@utility entrada-foto {
+  animation: assentar 1.6s var(--ease-premium) both;
+}
+
+@utility pulso {
+  animation: pulso 6s var(--ease-premium) infinite;
+  animation-delay: 2s;
+}
+
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@keyframes assentar {
+  from {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes pulso {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  18%,
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   MOVIMENTO REDUZIDO: o conteúdo aparece direto.
+   `data-reveal` marca tudo que o motion anima na entrada.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .entrada,
+  .entrada-foto,
+  .pulso,
+  .animate-marquee {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================================
+   REDE DE SEGURANÇA: se o JavaScript não iniciar (erro, bloqueio, conexão ruim),
+   o React nunca marca <html data-hidratado> e, após 2,5s, todo conteúdo animado
+   aparece sozinho. Com o React funcionando, esta regra deixa de valer e as
+   animações de entrada continuam normais.
+   ========================================================================== */
+
+@keyframes revelar-sem-js {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+html:not([data-hidratado]) [data-reveal] {
+  animation: revelar-sem-js 0.6s var(--ease-premium) 2.5s forwards;
+}
