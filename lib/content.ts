@@ -167,7 +167,7 @@ export const site = {
 };
 
 export const tracking = {
-  gtmId: "", // PREENCHER (ex.: "GTM-XXXXXXX")
+  gtmId: "GTM-WCTZLTW6",
   metaPixelId: "", // PREENCHER (ex.: "123456789012345")
 };
 
@@ -475,10 +475,4 @@ export const faq = {
 export const rodape = {
   politicaPrivacidadeUrl: "#", // PREENCHER
   ano: 2026,
-};
-
-export const cookies = {
-  texto: "Usamos cookies para medir o desempenho da página e melhorar sua experiência.",
-  aceitar: "Aceitar",
-  recusar: "Recusar",
 };

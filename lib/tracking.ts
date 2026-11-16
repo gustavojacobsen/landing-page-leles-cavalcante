@@ -7,7 +7,7 @@ declare global {
   }
 }
 
-/** Dispara o evento de lead em todo clique de CTA. GTM e Pixel só existem após o aceite de cookies. */
+/** Dispara o evento de lead em todo clique de CTA. GTM e Pixel carregam junto com a página. */
 export function trackLead(origem: OrigemCTA) {
   if (typeof window === "undefined") return;
   window.dataLayer?.push({ event: "lead_whatsapp", origem });

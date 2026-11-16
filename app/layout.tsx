@@ -6,7 +6,7 @@ import { jsonLd } from "@/lib/jsonld";
 import { Providers } from "@/components/Providers";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
-import { CookieBanner } from "@/components/ui/CookieBanner";
+import { Rastreamento } from "@/components/Rastreamento";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -94,7 +94,8 @@ const dentistaJsonLd = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="pt-BR" className={`${fraunces.variable} ${manrope.variable} ${cinzel.variable}`}>
-      <body>
+      {/* suppressHydrationWarning: extensões do navegador (ex.: ColorZilla) injetam atributos no <body> */}
+      <body suppressHydrationWarning>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: jsonLd(dentistaJsonLd) }}
@@ -102,8 +103,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 
         {/*
           GTM e Meta Pixel: os IDs ficam em `lib/content.ts` → `tracking`.
-          Os scripts só carregam depois do aceite no <CookieBanner /> (LGPD).
-          O aviso de cookies só aparece quando algum desses IDs estiver preenchido.
+          Os scripts carregam assim que a página abre (<Rastreamento />), sem aviso de cookies.
           Enquanto os IDs estiverem vazios, nada é carregado:
             tracking.gtmId       = "GTM-XXXXXXX"
             tracking.metaPixelId = "000000000000000"
@@ -120,7 +120,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <ScrollProgress />
           {children}
           <WhatsAppFloat />
-          <CookieBanner />
+          <Rastreamento />
         </Providers>
       </body>
     </html>
